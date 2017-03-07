@@ -26,3 +26,8 @@
 button {
   margin-left: 5px !important;
 }
+
+/* overwritting bootstrap css rule */
+.table > tbody > tr > td {
+     vertical-align: middle !important;
+}
