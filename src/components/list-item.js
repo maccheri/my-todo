@@ -18,7 +18,7 @@ export default class ListItem extends Component{
     const trStyle = (this.props.isCompleted) ? 'success' : 'warning';
 
     return (
-      <tr className={trStyle} role='button' onClick={this.props.onClick}>
+      <tr className={trStyle} role='button' onClick={this.props.toggleTask.bind(this, this.props.id)} >
         <td>{this.props.id}</td>
         <td>{this.props.task}</td>
           {this.renderButtons()}

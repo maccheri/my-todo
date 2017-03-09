@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import List from './components/list';
+import _ from 'lodash';
 
 const todoList = [
     { id: 1, task: 'Watch TV', isCompleted: false },
@@ -17,9 +18,11 @@ class App extends Component {
         };
     }
 
-    onTodoItemClick(todo) {
-        // TODO find the specific item that was clicked and update the state
-        console.log(todo);
+    onTodoItemClick(id) {
+      const foundTodo = _.find(this.state.todos, todo => todo.id === id);
+      foundTodo.isCompleted = !foundTodo.isCompleted;
+
+      this.setState({ todos: this.state.todos });
     }
 
     render() {
@@ -32,7 +35,7 @@ class App extends Component {
                     </div>
                 </div>
                 <div className='row'>
-                    <List todos={this.state.todos} onClick={this.onTodoItemClick}/>
+                    <List todos={this.state.todos} toggleTask={this.onTodoItemClick.bind(this)}/>
                 </div>
             </div>
         );
