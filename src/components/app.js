@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
-import './App.css';
-import List from './components/list';
+import logo from '../logo.svg';
+import '../app.css';
+import List from './list';
 import _ from 'lodash';
 
 const todoList = [
@@ -25,6 +25,17 @@ class App extends Component {
       this.setState({ todos: this.state.todos });
     }
 
+    handleEdit(id, newTaskName){
+      const editedTodo = _.find(this.state.todos, todo => todo.id === id);
+      editedTodo.task = newTaskName;
+
+      this.setState({ todos: this.state.todos });
+    }
+
+    handleDelete(){
+
+    }
+
     render() {
         return (
             <div>
@@ -35,7 +46,11 @@ class App extends Component {
                     </div>
                 </div>
                 <div className='row'>
-                    <List todos={this.state.todos} toggleTask={this.onTodoItemClick.bind(this)}/>
+                    <List
+                      todos={this.state.todos}
+                      toggleTask={this.onTodoItemClick.bind(this)}
+                      handleEdit={this.handleEdit.bind(this)}
+                    />
                 </div>
             </div>
         );
