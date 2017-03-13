@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import update from 'react-addons-update';
 import List from './list';
 import AddItem from './add-item';
 import _ from 'lodash';
@@ -40,7 +41,16 @@ class App extends Component {
         this.setState({todos: this.state.todos});
     }
 
-    handleDelete() {}
+    handleDelete(taskId) {
+        const index = _.findIndex(this.state.todos, (todo) => todo.id === taskId);
+        this.setState({
+            todos: update(this.state.todos, {
+                $splice: [
+                    [index, 1]
+                ]
+            })
+        });
+    }
 
     handleAdd(newTaskName, lastItemById) {
         const {id} = lastItemById;
@@ -68,7 +78,7 @@ class App extends Component {
                 </div>
                 <div className='row'>
                     <AddItem todos={this.state.todos} handleAdd={this.handleAdd.bind(this)}/>
-                    <List todos={this.state.todos} toggleTask={this.onTodoItemClick.bind(this)} handleEdit={this.handleEdit.bind(this)}/>
+                    <List todos={this.state.todos} toggleTask={this.onTodoItemClick.bind(this)} handleEdit={this.handleEdit.bind(this)} handleDelete={this.handleDelete.bind(this)}/>
                 </div>
             </div>
         );

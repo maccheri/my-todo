@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import _ from 'lodash';
 
 export default class AddItem extends Component {
@@ -14,7 +14,7 @@ export default class AddItem extends Component {
     onAddTodo(e) {
         e.preventDefault();
         const {value} = this.addInput;
-        const foundTodo = _.find(this.props.todos, todo => todo.task === value);
+        const foundTodo = _.find(this.props.todos, todo => todo.task.toLowerCase() === value.toLowerCase());
 
         if (typeof foundTodo === 'object') {
             this.setState({error: true});
@@ -25,10 +25,11 @@ export default class AddItem extends Component {
                         return current;
                     }
                 } else {
-                    return { id: 0 };
+                    return {id: 0};
                 }
             }, {});
             this.props.handleAdd(value, lastItemById);
+            this.addInput.value = '';
             this.setState({error: false});
         }
     }
@@ -37,7 +38,7 @@ export default class AddItem extends Component {
         if (this.state.error) {
             return (
                 <div className='has-error col-md-offset-2 col-md-8'>
-                    <label className="control-label" htmlFor="addNewTodo">Input with error</label>
+                    <label className="control-label" htmlFor="addNewTodo">This task already exists!</label>
                 </div>
             );
         }
@@ -57,7 +58,7 @@ export default class AddItem extends Component {
                             <input type="text" className='form-control' id='addNewTodo' placeholder='Type your todo here' ref={(input) => this.addInput = (input)}/>
                         </div>
                         <button className='btn btn-primary' onClick={this.onAddTodo}>Add</button>
-                        {this.renderError}
+                        {this.renderError()}
                     </div>
                 </form>
             </div>
