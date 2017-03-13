@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import update from 'react-addons-update';
 import List from './list';
 import AddItem from './add-item';
+import Filter from './filter';
 import _ from 'lodash';
 import '../app.css';
 import logo from '../logo.svg';
@@ -10,11 +11,11 @@ const todoList = [
     {
         id: 1,
         task: 'Watch TV',
-        isCompleted: false
+        isDone: false
     }, {
         id: 2,
         task: 'Wash the dishes',
-        isCompleted: true
+        isDone: true
     }
 ];
 
@@ -23,13 +24,14 @@ class App extends Component {
         super(props);
 
         this.state = {
-            todos: todoList
+            todos: todoList,
+            filter: 'SHOW_ALL'
         };
     }
 
     onTodoItemClick(id) {
         const foundTodo = _.find(this.state.todos, todo => todo.id === id);
-        foundTodo.isCompleted = !foundTodo.isCompleted;
+        foundTodo.isDone = !foundTodo.isDone;
 
         this.setState({todos: this.state.todos});
     }
@@ -60,11 +62,15 @@ class App extends Component {
             ...this.state.todos, {
                 id: newTaskId,
                 task: newTaskName,
-                isCompleted: false
+                isDone: false
             }
         ];
 
         this.setState({todos: newState});
+    }
+
+    setFilter(filter){
+      this.setState({filter});
     }
 
     render() {
@@ -78,7 +84,8 @@ class App extends Component {
                 </div>
                 <div className='row'>
                     <AddItem todos={this.state.todos} handleAdd={this.handleAdd.bind(this)}/>
-                    <List todos={this.state.todos} toggleTask={this.onTodoItemClick.bind(this)} handleEdit={this.handleEdit.bind(this)} handleDelete={this.handleDelete.bind(this)}/>
+                    <Filter setFilter={this.setFilter.bind(this)}/>
+                    <List todos={this.state.todos} toggleTask={this.onTodoItemClick.bind(this)} handleEdit={this.handleEdit.bind(this)} handleDelete={this.handleDelete.bind(this)} filter={this.state.filter}/>
                 </div>
             </div>
         );

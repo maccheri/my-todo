@@ -11,7 +11,7 @@ export default class ListItem extends Component {
     }
 
     renderDoneUndone() {
-        if (this.props.isCompleted) {
+        if (this.props.isDone) {
             return (
                 <td className='col-md-1'>
                     <button type='button' className='btn btn-default' onClick={this.props.toggleTask.bind(this, this.props.id)}>Undone</button>
@@ -28,9 +28,9 @@ export default class ListItem extends Component {
 
     renderButtons() {
         const {editing} = this.state;
-        const {isCompleted, id} = this.props;
+        const {isDone, id} = this.props;
 
-        if (isCompleted) {
+        if (isDone) {
             return (
                 <td className="text-right col-md-2">
                     <button type='button' className='btn btn-danger' onClick={this.props.handleDelete.bind(this, id)}>Delete</button>
@@ -79,17 +79,32 @@ export default class ListItem extends Component {
         );
     }
 
-    render() {
-        const trStyle = (this.props.isCompleted)
+    renderItem() {
+        const {isDone, filter} = this.props;
+        const trStyle = (isDone)
             ? 'success'
             : 'warning';
 
-        return (
-            <tr className={trStyle} role='button'>
-                {this.renderDoneUndone()}
-                {this.renderDescription()}
-                {this.renderButtons()}
-            </tr>
-        );
+        const doneCondition = (filter === 'DONE' && isDone);
+        const unDoneCondition = (filter === 'UNDONE' && !isDone);
+        const allCondition = (filter === 'SHOW_ALL');
+        const showItem = doneCondition || unDoneCondition || allCondition;
+
+        if (showItem) {
+            return (
+                <tr className={trStyle} role='button'>
+                    {this.renderDoneUndone()}
+                    {this.renderDescription()}
+                    {this.renderButtons()}
+                </tr>
+            );
+        }
+
+        return null;
+    }
+
+    render() {
+        return (this.renderItem());
+
     }
 }

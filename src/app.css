@@ -31,3 +31,7 @@ button {
 .table > tbody > tr > td {
      vertical-align: middle !important;
 }
+
+.navigation-margin {
+  margin: 10px;
+}
