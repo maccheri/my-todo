@@ -45,8 +45,10 @@ export default class ListItem extends Component{
   editTask(e){
     e.preventDefault();
     const { handleEdit, id } = this.props;
-    handleEdit(id, this.taskEditingInput.value);
-    this.setState({ editing: false });
+    if(this.taskEditingInput.value.toString().trim() !== ''){
+      handleEdit(id, this.taskEditingInput.value);
+      this.setState({ editing: false });
+    }
   }
 
   renderDescription() {

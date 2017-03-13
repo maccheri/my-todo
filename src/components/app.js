@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import logo from '../logo.svg';
-import '../app.css';
 import List from './list';
+import AddItem from './add-item';
 import _ from 'lodash';
+import '../app.css';
+import logo from '../logo.svg';
 
 const todoList = [
     {
@@ -15,39 +16,6 @@ const todoList = [
         isCompleted: true
     }
 ];
-
-class AddItem extends Component {
-    constructor(props) {
-        super(props);
-
-        this.doSomething = this.doSomething.bind(this);
-    }
-
-    doSomething(e) {
-        e.preventDefault();
-        console.log(this.props);
-    }
-
-    render() {
-        const divStyle = {
-            marginTop: 10
-        };
-
-        return (
-            <div className='col-sm-offset-2 col-md-8' style={divStyle}>
-                <form className='form-horizontal' onSubmit={this.doSomething}>
-                    <div className='form-group'>
-                        <label htmlFor='addNewTodo' className='col-sm-2 control-label'>Add new todo</label>
-                        <div className='col-md-8'>
-                            <input type="text" className='form-control' id='addNewTodo' placeholder='Type your todo here'/>
-                        </div>
-                        <button className='btn btn-primary' onClick={this.doSomething}>Add</button>
-                    </div>
-                </form>
-            </div>
-        );
-    }
-}
 
 class App extends Component {
     constructor(props) {
@@ -74,6 +42,21 @@ class App extends Component {
 
     handleDelete() {}
 
+    handleAdd(newTaskName, lastItemById) {
+        const {id} = lastItemById;
+        const newTaskId = id + 1;
+
+        var newState = [
+            ...this.state.todos, {
+                id: newTaskId,
+                task: newTaskName,
+                isCompleted: false
+            }
+        ];
+
+        this.setState({todos: newState});
+    }
+
     render() {
         return (
             <div>
@@ -84,7 +67,7 @@ class App extends Component {
                     </div>
                 </div>
                 <div className='row'>
-                    <AddItem todos={this.state.todos}/>
+                    <AddItem todos={this.state.todos} handleAdd={this.handleAdd.bind(this)}/>
                     <List todos={this.state.todos} toggleTask={this.onTodoItemClick.bind(this)} handleEdit={this.handleEdit.bind(this)}/>
                 </div>
             </div>
