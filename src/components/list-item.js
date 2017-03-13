@@ -31,7 +31,7 @@ export default class ListItem extends Component{
     }
 
     if(editing){
-      return (<td className="text-right col-md-2">
+      return (<td className="text-right col-md-3">
         <button type='button' className='btn btn-success' onClick={this.editTask.bind(this)}>Save</button>
         <button type='button' className='btn btn-danger' onClick={() => this.setState({ editing: false })}>Cancel</button>
       </td>);
@@ -44,7 +44,7 @@ export default class ListItem extends Component{
 
   editTask(e){
     e.preventDefault();
-    const { handleEdit, id } = this.props;    
+    const { handleEdit, id } = this.props;
     handleEdit(id, this.taskEditingInput.value);
     this.setState({ editing: false });
   }
@@ -53,7 +53,7 @@ export default class ListItem extends Component{
     if(this.state.editing){
       return (<td>
           <form onSubmit={this.editTask.bind(this)}>
-            <input type='text' defaultValue={this.props.task} ref={(input) => this.taskEditingInput = input } />
+            <input type='text' className='form-control' defaultValue={this.props.task} ref={(input) => this.taskEditingInput = input } />
           </form>
       </td>);
     }
