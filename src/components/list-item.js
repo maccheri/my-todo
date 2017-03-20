@@ -28,12 +28,12 @@ export default class ListItem extends Component {
 
     renderButtons() {
         const {editing} = this.state;
-        const {isDone, id} = this.props.todo;
+        const {todo, removeTodo} = this.props;
 
-        if (isDone) {
+        if (todo.isDone) {
             return (
                 <td className="text-right col-md-2">
-                    <button type='button' className='btn btn-danger' onClick={() => this.props.handleDelete(id)}>Delete</button>
+                    <button type='button' className='btn btn-danger' onClick={() => removeTodo(todo)}>Delete</button>
                 </td>
             );
         }
@@ -41,7 +41,7 @@ export default class ListItem extends Component {
         if (editing) {
             return (
                 <td className="text-right col-md-3">
-                    <button type='button' className='btn btn-success' onClick={() => this.editTask()}>Save</button>
+                    <button type='button' className='btn btn-success' onClick={(e) => this.editTask(e)}>Save</button>
                     <button type='button' className='btn btn-danger' onClick={() => this.setState({editing: false})}>Cancel</button>
                 </td>
             );
@@ -56,27 +56,27 @@ export default class ListItem extends Component {
 
     editTask(e) {
         e.preventDefault();
-        const {id} = this.props.todo;
-        const {handleEdit} = this.props;
+        const {handleEdit, updateTodo, todo} = this.props;
         if (this.taskEditingInput.value.toString().trim() !== '') {
-            handleEdit(id, this.taskEditingInput.value);
-            this.setState({editing: false});
+            updateTodo({ ...todo, task: this.taskEditingInput.value});
+            this.setState({ editing: false });
         }
     }
 
     renderDescription() {
+        const {task} = this.props.todo;
         if (this.state.editing) {
             return (
                 <td>
                     <form onSubmit={this.editTask.bind(this)}>
-                        <input type='text' className='form-control' defaultValue={this.props.task} ref={(input) => this.taskEditingInput = input}/>
+                        <input type='text' className='form-control' defaultValue={task} ref={(input) => this.taskEditingInput = input}/>
                     </form>
                 </td>
             );
         }
 
         return (
-            <td>{this.props.todo.task}</td>
+            <td>{task}</td>
         );
     }
 

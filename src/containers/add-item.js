@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import _ from 'lodash';
+import {insertTodo} from '../actions/index';
 
-export default class AddItem extends Component {
+class AddItem extends Component {
     constructor(props) {
         super(props);
 
@@ -20,15 +23,14 @@ export default class AddItem extends Component {
             this.setState({error: true});
         } else {
             const lastItemById = _.reduce(this.props.todos, (previous, current, index) => {
-                if (typeof previous === 'object' && !isNaN(previous.id)) {
+                if (typeof current === 'object' && !isNaN(current.id)) {
                     if (current.id > previous.id) {
                         return current;
                     }
-                } else {
-                    return {id: 0};
                 }
-            }, {});
-            this.props.handleAdd(value, lastItemById);
+            }, { id: 0 });
+            
+            this.props.insertTodo({ id: lastItemById.id + 1, task: value, isDone: false });
             this.addInput.value = '';
             this.setState({error: false});
         }
@@ -65,3 +67,15 @@ export default class AddItem extends Component {
         );
     }
 }
+
+function mapStateToProps({todos}) {
+    return {todos};
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        insertTodo
+    }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddItem);

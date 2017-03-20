@@ -3,11 +3,13 @@ import {connect} from 'react-redux';
 import _ from 'lodash';
 import {bindActionCreators} from 'redux';
 import ListItem from '../components/list-item';
-import {toggleTodo} from '../actions/index';
+import {toggleTodo, removeTodo, updateTodo} from '../actions/index';
 
 class List extends Component {
 
     render() {
+      console.log(this.props.todos);
+
         const props = _.omit(this.props, 'todos');
         const elements = this.props.todos.map(todo => <ListItem key={todo.id} todo={todo} {...props}/>);
 
@@ -29,7 +31,9 @@ function mapStateToProps({todos, filter}) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        toggleTodo
+        toggleTodo,
+        removeTodo,
+        updateTodo
     }, dispatch);
 }
 

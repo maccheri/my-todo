@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import update from 'react-addons-update';
-import List from '../containers/list';
-import AddItem from './add-item';
-import Filter from '../containers/filter';
 import _ from 'lodash';
+import List from '../containers/list';
+import AddItem from '../containers/add-item';
+import Filter from '../containers/filter';
 import '../app.css';
 import logo from '../logo.svg';
 
