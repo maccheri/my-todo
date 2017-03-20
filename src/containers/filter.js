@@ -1,25 +1,14 @@
 import React, {Component} from 'react';
-import { connect } from 'react-redux';
-import FilterItem from '../components/filter-item';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import _ from 'lodash';
+import {changeFilter} from '../actions/index';
+import FilterItem from '../components/filter-item';
 
 class Filter extends Component {
-    setFilter(type) {
-        const filters = _.map(this.props.filters, (filter) => {
-            if (filter.type === type) {
-                filter.active = true;
-            } else {
-                filter.active = false;
-            }
-            return filter;
-        });
-        // TRIGGER ACTION
-        // this.props.setFilter(type);
-        // this.setState({filters});
-    }
-
     render() {
-        const elements = _.map(this.props.filters, (filter, index) => <FilterItem key={index} {...filter} setFilter={this.setFilter.bind(this)}/>);
+        const {activeFilter, filters} = this.props.filters;
+        const elements = _.map(filters, (filter, index) => <FilterItem key={index} filter={filter} activeFilter={activeFilter} changeFilter={this.props.changeFilter}/>);
 
         return (
             <div className='row navigation-margin'>
@@ -31,10 +20,16 @@ class Filter extends Component {
     }
 }
 
-function mapStateToProps(state){
-  return {
-    filters: state.filters
-  }
+function mapStateToProps(state) {
+    return {
+      filters: state.filter
+    };
 }
 
-export default connect(mapStateToProps)(Filter);
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        changeFilter
+    }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

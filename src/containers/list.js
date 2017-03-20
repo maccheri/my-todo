@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import _ from 'lodash';
-import { bindActionCreators } from 'redux';
+import {bindActionCreators} from 'redux';
 import ListItem from '../components/list-item';
 import {toggleTodo} from '../actions/index';
 
@@ -9,7 +9,6 @@ class List extends Component {
 
     render() {
         const props = _.omit(this.props, 'todos');
-
         const elements = this.props.todos.map(todo => <ListItem key={todo.id} todo={todo} {...props}/>);
 
         return (
@@ -24,15 +23,14 @@ class List extends Component {
     }
 }
 
-function mapStateToProps(state) {
-  return {
-    todos: state.todos,
-    filter: state.filter
-  };
+function mapStateToProps({todos, filter}) {
+    return {todos, filter};
 }
 
-function mapDispatchToProps(dispatch){
-  return bindActionCreators({ toggleTodo }, dispatch);
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        toggleTodo
+    }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(List);
