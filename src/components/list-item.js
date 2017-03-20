@@ -11,29 +11,29 @@ export default class ListItem extends Component {
     }
 
     renderDoneUndone() {
-        if (this.props.isDone) {
+        if (this.props.todo.isDone) {
             return (
                 <td className='col-md-1'>
-                    <button type='button' className='btn btn-default' onClick={this.props.toggleTask.bind(this, this.props.id)}>Undone</button>
+                    <button type='button' className='btn btn-default' onClick={() => this.props.toggleTodo(this.props.todo)}>Undone</button>
                 </td>
             );
         }
 
         return (
             <td className='col-md-1'>
-                <button type='button' className='btn btn-default' onClick={this.props.toggleTask.bind(this, this.props.id)}>Done</button>
+                <button type='button' className='btn btn-default' onClick={() => this.props.toggleTodo(this.props.todo)}>Done</button>
             </td>
         );
     }
 
     renderButtons() {
         const {editing} = this.state;
-        const {isDone, id} = this.props;
+        const {isDone, id} = this.props.todo;
 
         if (isDone) {
             return (
                 <td className="text-right col-md-2">
-                    <button type='button' className='btn btn-danger' onClick={this.props.handleDelete.bind(this, id)}>Delete</button>
+                    <button type='button' className='btn btn-danger' onClick={() => this.props.handleDelete(id)}>Delete</button>
                 </td>
             );
         }
@@ -41,7 +41,7 @@ export default class ListItem extends Component {
         if (editing) {
             return (
                 <td className="text-right col-md-3">
-                    <button type='button' className='btn btn-success' onClick={this.editTask.bind(this)}>Save</button>
+                    <button type='button' className='btn btn-success' onClick={() => this.editTask()}>Save</button>
                     <button type='button' className='btn btn-danger' onClick={() => this.setState({editing: false})}>Cancel</button>
                 </td>
             );
@@ -56,7 +56,8 @@ export default class ListItem extends Component {
 
     editTask(e) {
         e.preventDefault();
-        const {handleEdit, id} = this.props;
+        const {id} = this.props.todo;
+        const {handleEdit} = this.props;
         if (this.taskEditingInput.value.toString().trim() !== '') {
             handleEdit(id, this.taskEditingInput.value);
             this.setState({editing: false});
@@ -75,19 +76,20 @@ export default class ListItem extends Component {
         }
 
         return (
-            <td>{this.props.task}</td>
+            <td>{this.props.todo.task}</td>
         );
     }
 
     renderItem() {
-        const {isDone, filter} = this.props;
+        const {isDone} = this.props.todo;
+        const {activeFilter} = this.props.filter;
         const trStyle = (isDone)
             ? 'success'
             : 'warning';
 
-        const doneCondition = (filter === 'DONE' && isDone);
-        const unDoneCondition = (filter === 'UNDONE' && !isDone);
-        const allCondition = (filter === 'SHOW_ALL');
+        const doneCondition = (activeFilter === 'DONE' && isDone);
+        const unDoneCondition = (activeFilter === 'UNDONE' && !isDone);
+        const allCondition = (activeFilter === 'SHOW_ALL');
         const showItem = doneCondition || unDoneCondition || allCondition;
 
         if (showItem) {
@@ -105,6 +107,5 @@ export default class ListItem extends Component {
 
     render() {
         return (this.renderItem());
-
     }
 }
